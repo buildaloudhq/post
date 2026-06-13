@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/buildaloudhq/post/compare/v0.1.0...v0.2.0) (2026-06-13)
+
+
+### Features
+
+* distribute via npm ([dda05aa](https://github.com/buildaloudhq/post/commit/dda05aaacfe852871ec2759baeb81357baf1ffe0))
+
 ## 0.1.0 (2026-06-13)
 
 
