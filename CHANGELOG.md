@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/buildaloudhq/post/compare/v0.2.0...v0.3.0) (2026-06-13)
+
+
+### Features
+
+* update status log ([00a3b0e](https://github.com/buildaloudhq/post/commit/00a3b0eeda08cb829a6196958e9ef3698a34b311))
+
 ## [0.2.0](https://github.com/buildaloudhq/post/compare/v0.1.0...v0.2.0) (2026-06-13)
 
 
