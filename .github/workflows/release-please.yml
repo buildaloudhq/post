@@ -53,9 +53,8 @@ jobs:
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: lts/*
-          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest
       - name: Publish to npm
         run: node npm/publish.mjs
         env:
           VERSION: ${{ needs.release-please.outputs.tag_name }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
