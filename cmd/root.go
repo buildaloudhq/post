@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -11,7 +12,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:          meta.Name,
 	Short:        "Draft and cross-post to social-media platforms",
-	Version:      meta.Version,
+	Version:      fmt.Sprintf("%s (commit %s, built %s)", meta.Version, meta.Commit, meta.Date),
 	SilenceUsage: true,
 }
 

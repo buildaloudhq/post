@@ -1,0 +1,91 @@
+# https://goreleaser.com
+# Validate locally with:  goreleaser check
+# Dry-run a full build with: goreleaser release --snapshot --clean
+version: 2
+
+project_name: post
+
+gomod:
+  proxy: true
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    # Reproducible builds: pin the binary's mod time to the commit and strip
+    # local filesystem paths out of the binary.
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X github.com/buildaloudhq/post/internal/meta.Version={{ .Version }}
+      - -X github.com/buildaloudhq/post/internal/meta.Commit={{ .Commit }}
+      - -X github.com/buildaloudhq/post/internal/meta.Date={{ .CommitDate }}
+
+archives:
+  - formats: [tar.gz]
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    builds_info:
+      mtime: "{{ .CommitTimestamp }}"
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+
+source:
+  enabled: true
+  name_template: "{{ .ProjectName }}_{{ .Version }}_source"
+
+checksum:
+  name_template: checksums.txt
+
+signs:
+  - cmd: cosign
+    signature: "${artifact}.sigstore.json"
+    args:
+      - sign-blob
+      - "--bundle=${signature}"
+      - "${artifact}"
+      - "--yes"
+    artifacts: checksum
+    output: true
+
+# Software Bill of Materials (syft) for the archives and the source tarball.
+sboms:
+  - artifacts: archive
+  - id: source
+    artifacts: source
+
+changelog:
+  disable: true
+
+release:
+  mode: keep-existing
+
+homebrew_casks:
+  - name: post
+    binaries:
+      - post
+    repository:
+      owner: buildaloudhq
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    homepage: "https://buildaloud.com"
+    description: "Draft and cross-post to social-media platforms"
+    commit_author:
+      name: buildaloud-bot
+      email: bot@buildaloud.com
+    # The binary isn't code-signed/notarised, so macOS Gatekeeper quarantines
+    # it. Strip the attribute on install so `post` runs without being blocked.
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/post"]
+          end

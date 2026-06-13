@@ -2,7 +2,11 @@ package meta
 
 const Name = "post"
 
-// Version is the build version. It's a var (not a const) so the release
-// build can inject the real value via -ldflags "-X .../meta.Version=v1.2.3".
-// Local and source builds report "dev".
-var Version = "dev"
+// Version, Commit, and Date are the build identifiers — vars (not consts) so
+// the release build injects real values via -ldflags "-X .../meta.Version=…".
+// Local and source builds report the defaults below.
+var (
+	Version = "dev"
+	Commit  = "none"
+	Date    = "unknown"
+)
