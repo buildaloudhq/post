@@ -1,5 +1,6 @@
 /post
 /dist/
+/npm/.out/
 *.out
 .env
 .env.*

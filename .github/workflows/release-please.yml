@@ -50,3 +50,12 @@ jobs:
       - uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
         with:
           subject-checksums: ./dist/checksums.txt
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: lts/*
+          registry-url: https://registry.npmjs.org
+      - name: Publish to npm
+        run: node npm/publish.mjs
+        env:
+          VERSION: ${{ needs.release-please.outputs.tag_name }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
