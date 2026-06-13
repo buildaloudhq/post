@@ -14,6 +14,7 @@ var statusCmd = &cobra.Command{
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Printf("%s %s\n", meta.Name, meta.Version)
+		fmt.Printf("Welcome to post CLI!")
 	},
 }
 
