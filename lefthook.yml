@@ -2,3 +2,8 @@ commit-msg:
   commands:
     conventional:
       run: bash scripts/check-commit-msg.sh {1}
+
+pre-push:
+  commands:
+    branch-name:
+      run: bash scripts/check-branch-name.sh
